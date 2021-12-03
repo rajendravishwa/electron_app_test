@@ -5,6 +5,12 @@ if (!(Test-Path -LiteralPath "$currentLocation\node_modules")) {
     npm install
 }
 
-npx electron-packager $currentLocation "PerfMonitor" --overwrite
-Compress-Archive -Path PerfMonitor-win32-x64 -DestinationPath PerfMonitor-win32-x64.zip
-Remove-Item PerfMonitor-win32-x64 -Recurse
+if (!(Test-Path -LiteralPath "$currentLocation\node_modules\electron-packager")) {
+    npm install --save-dev electron-packager
+}
+
+npx electron-packager $currentLocation "PerfMonitor" --overwrite --platform=win32 --arch=x64 --icon=./assets/icon.ico
+$buildfolder = Get-ChildItem -Directory -Path $currentLocation -Filter "PerfMonitor*"
+Write-Output "Packaging build into $buildfolder.zip"
+Compress-Archive -Path $buildfolder -Force -DestinationPath "$buildfolder.zip"
+Remove-Item $buildfolder -Recurse
