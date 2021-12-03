@@ -2,11 +2,11 @@ $currentLocation = Get-Location
 
 # Perform npm install if node_modules folder doesn't exist
 if (!(Test-Path -LiteralPath "$currentLocation\node_modules")) {
-    npm install
+    npm install --prefix .\wmi_panel
 }
 
 if (!(Test-Path -LiteralPath "$currentLocation\node_modules\electron-packager")) {
-    npm install --save-dev electron-packager
+    npm install --prefix .\wmi_panel\node_modules\electron-packager --save-dev electron-packager
 }
 
 npx electron-packager $currentLocation "PerfMonitor" --overwrite --platform=win32 --arch=x64 --icon=./assets/icon.ico
